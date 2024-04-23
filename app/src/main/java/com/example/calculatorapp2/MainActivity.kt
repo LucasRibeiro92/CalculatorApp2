@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         setupBindings()
         setupListeners()
 
-        // Restaurar o estado da aplicação se houver um Bundle salvo
+        // Restore the state of the app if exists a saved bundle
         savedInstanceState?.let {
             operands = it.getDoubleArray("operands")?.toMutableList() ?: mutableListOf()
             operators = it.getStringArray("operators")?.toMutableList() ?: mutableListOf()
@@ -93,31 +93,31 @@ class MainActivity : AppCompatActivity() {
 
     //Function to setup all the needed buttons' listeners.
     private fun setupListeners(){
-        btnClear.setOnClickListener { onClear() }
-        btnBack.setOnClickListener { onBack() }
-        btnDivide.setOnClickListener { onOperator("/") }
-        btn7.setOnClickListener { onDigit("7") }
-        btn8.setOnClickListener { onDigit("8") }
-        btn9.setOnClickListener { onDigit("9") }
-        btnMultiply.setOnClickListener { onOperator("*") }
-        btn4.setOnClickListener { onDigit("4") }
-        btn5.setOnClickListener { onDigit("5") }
-        btn6.setOnClickListener { onDigit("6") }
-        btnSubtract.setOnClickListener { onOperator("-") }
+        btn0.setOnClickListener { onDigit("0") }
         btn1.setOnClickListener { onDigit("1") }
         btn2.setOnClickListener { onDigit("2") }
         btn3.setOnClickListener { onDigit("3") }
+        btn4.setOnClickListener { onDigit("4") }
+        btn5.setOnClickListener { onDigit("5") }
+        btn6.setOnClickListener { onDigit("6") }
+        btn7.setOnClickListener { onDigit("7") }
+        btn8.setOnClickListener { onDigit("8") }
+        btn9.setOnClickListener { onDigit("9") }
         btnAdd.setOnClickListener { onOperator("+") }
-        btn0.setOnClickListener { onDigit("0") }
-        btnDot.setOnClickListener { onDot() }
+        btnSubtract.setOnClickListener { onOperator("-") }
+        btnMultiply.setOnClickListener { onOperator("*") }
+        btnDivide.setOnClickListener { onOperator("/") }
         btnEqual.setOnClickListener { onEqual() }
         btnSquareRoot.setOnClickListener { onSquareRoot() }
         btnExponentiation.setOnClickListener { onExponentiation() }
+        btnClear.setOnClickListener { onClear() }
+        btnBack.setOnClickListener { onBack() }
+        btnDot.setOnClickListener { onDot() }
         btnStore.setOnClickListener { onStore() }
         btnRecall.setOnClickListener { onRecall() }
     }
 
-    // Salva o estado da aplicação quando necessário
+    //Saving the state of app, when needed.
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putDoubleArray("operands", operands.toDoubleArray())
@@ -127,6 +127,7 @@ class MainActivity : AppCompatActivity() {
         outState.putString("displayText", display.text.toString())
     }
 
+    //Function to be called when user click on any Number button.
     private fun onDigit(digit: String) {
         if (isNewOperand) {
             display.text = digit
@@ -136,6 +137,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    //Function to be called when user click on any Operator button.
     private fun onOperator(operator: String) {
         if (!isNewOperand) {
             val value = display.text.toString().toDouble()
@@ -149,6 +151,7 @@ class MainActivity : AppCompatActivity() {
         isNewOperand = true
     }
 
+    //Function to be called when user click on Clear button.
     private fun onClear() {
         display.text = "0"
         operands.clear()
@@ -156,21 +159,25 @@ class MainActivity : AppCompatActivity() {
         isNewOperand = true
     }
 
+    //Function to be called when user click on Equal button.
     private fun onEqual() {
         if (!isNewOperand && operators.isNotEmpty()) {
             val value = display.text.toString().toDouble()
             operands.add(value)
+            //Test loop
+            for(i in operands.indices){
+                Log.d(TAG, "on equal get value ${operands[i]}")
+                }
             performOperation()
-            isNewOperand = true
-            operands.clear()
-            operators.clear()
         }
     }
 
+    //Function to be called when app need to perform some calculus.
     private fun performOperation() {
         if (operators.isNotEmpty() && operands.size >= 2) {
             var result = operands[0]
             for (i in operators.indices) {
+                Log.d(TAG, "${operands[i]} ${operators[i]} ${operands[i + 1]}")
                 when (operators[i]) {
                     "+" -> result += operands[i + 1]
                     "-" -> result -= operands[i + 1]
@@ -180,13 +187,13 @@ class MainActivity : AppCompatActivity() {
             }
             display.text = result.toString()
             operands.clear()
-            operands.add(result)
             operators.clear()
         } else {
-            display.text = "53105"
+            display.text = "ERROR"
         }
     }
 
+    //Function to be called when user click on Back button.
     private fun onBack() {
         if (!isNewOperand && display.text.isNotEmpty() && display.text.length > 1) {
             display.text = display.text.dropLast(1)
@@ -196,6 +203,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    //Function to be called when user click on Dot button.
     private fun onDot() {
         if (isNewOperand) {
             display.text = "0."
@@ -205,23 +213,32 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    //Function to be called when user click on square root button.
     private fun onSquareRoot() {
         val value = display.text.toString().toDouble()
         display.text = sqrt(value).toString()
     }
 
+    //Function to be called when user click on exponentiation button.
     private fun onExponentiation() {
         val value = display.text.toString().toDouble()
         display.text = (value.pow(2)).toString()
     }
 
+    //Function to be called when user click on store button.
     private fun onStore() {
         memoryValue = display.text.toString().toDouble()
         isNewOperand = true
     }
 
+    //Function to be called when user click on recall button.
     private fun onRecall() {
-        display.text = memoryValue.toString()
-        isNewOperand = true
+        val value = memoryValue
+        if (isNewOperand) {
+            display.text = value.toString()
+            isNewOperand = false
+        } else {
+            display.append(value.toString())
+        }
     }
 }
