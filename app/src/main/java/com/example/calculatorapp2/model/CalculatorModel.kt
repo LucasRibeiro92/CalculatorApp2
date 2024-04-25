@@ -1,5 +1,6 @@
 package com.example.calculatorapp2.model
 
+import android.util.Log
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -11,6 +12,9 @@ class CalculatorModel {
     var memoryValue: Double = 0.0
 
     fun performOperation() {
+        for (i in operands.indices){
+            Log.d("CHECK_PERFORMOPERATION", "${operands[i]}")
+        }
         while (operators.size > 0 && operands.size >= 2) {
             val op = operators.removeAt(0) // Remove o próximo operador da lista
             val operand1 = operands.removeAt(0) // Remove o primeiro operando da lista

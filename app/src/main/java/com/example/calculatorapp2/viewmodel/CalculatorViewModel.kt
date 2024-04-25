@@ -35,11 +35,7 @@ class CalculatorViewModel : ViewModel() {
         if (!model.isNewOperand) {
             val value = model.displayValue.toDouble()
             model.operands.add(value)
-            if (operator == "=") {
-                model.performOperation()
-            }
         }
-
         model.operators.add(operator)
         model.isNewOperand = true
     }
@@ -54,6 +50,7 @@ class CalculatorViewModel : ViewModel() {
             val value = model.displayValue.toDouble()
             model.operands.add(value)
             model.performOperation()
+            updateDisplay(model.displayValue)
         }
     }
 
