@@ -11,28 +11,25 @@ class CalculatorModel {
     var isNewOperand: Boolean = true
     var memoryValue: Double = 0.0
 
+    //Function to execute most part of operations.
     fun performOperation() {
-        for (i in operands.indices){
-            Log.d("CHECK_PERFORMOPERATION", "${operands[i]}")
-        }
         while (operators.size > 0 && operands.size >= 2) {
-            val op = operators.removeAt(0) // Remove o próximo operador da lista
-            val operand1 = operands.removeAt(0) // Remove o primeiro operando da lista
-            val operand2 = operands.removeAt(0) // Remove o segundo operando da lista
+            val op = operators.removeAt(0) // Remove next operator from array
+            val operand1 = operands.removeAt(0) // Remove the first operand from array
+            val operand2 = operands.removeAt(0) // Remove the second operand from array
             when (op) {
-                "+" -> operands.add(operand1 + operand2) // Adiciona a soma dos operandos
-                "-" -> operands.add(operand1 - operand2) // Adiciona a subtração dos operandos
-                "*" -> operands.add(operand1 * operand2) // Adiciona a multiplicação dos operandos
-                "/" -> operands.add(operand1 / operand2) // Adiciona a divisão dos operandos
-                "x^2" -> operands.add(operand1.pow(2.0)) // Adiciona o quadrado do primeiro operando
+                "+" -> operands.add(operand1 + operand2) // Add the sum of operands to array
+                "-" -> operands.add(operand1 - operand2) // Add the subtraction of operands to array
+                "*" -> operands.add(operand1 * operand2) // Add the multiplication of operands to array
+                "/" -> operands.add(operand1 / operand2) // Add the division of operands to array
             }
         }
-        operators.clear() // Limpa a lista de operadores
-        isNewOperand = true // Define isNewOperand como verdadeiro
-        displayValue = operands.getOrNull(0)?.toString() ?: "ERROR" // Define o valor do display para o primeiro operando ou "ERROR" se não houver operando
-        operands.clear() // Limpa a lista de operandos
+        operators.clear() // Clean operators array
+        displayValue = operands.getOrNull(0)?.toString() ?: "ERROR" // Defines the display value or set to ERROR.
+        operands.clear() // Clean the operands array
     }
 
+    //Function to clear the display and variables
     fun clear() {
         displayValue = "0"
         operands.clear()
@@ -40,19 +37,9 @@ class CalculatorModel {
         isNewOperand = true
     }
 
-    fun calculateSquareRoot(value: Double): Double {
-        return sqrt(value)
-    }
-
-    fun calculateExponentiation(value: Double): Double {
-        return value.pow(2.0)
-    }
-
-    fun storeValue(value: Double) {
-        memoryValue = value
-    }
-
-    fun recallValue(): Double {
-        return memoryValue
-    }
+    //Other functions to deal with square root, exponentiation, storage and recall.
+    fun calculateSquareRoot(value: Double): Double { return sqrt(value) }
+    fun calculateExponentiation(value: Double): Double { return value.pow(2.0) }
+    fun storeValue(value: Double) { memoryValue = value }
+    fun recallValue(): Double { return memoryValue }
 }

@@ -56,7 +56,7 @@ class CalculatorViewModel : ViewModel() {
 
     fun onBack() {
         if (!model.isNewOperand && model.displayValue.isNotEmpty() && model.displayValue.length > 1) {
-            model.isNewOperand = true
+            model.displayValue = model.displayValue.substring(0, model.displayValue.length - 1)
         } else {
             model.clear()
         }
@@ -94,5 +94,6 @@ class CalculatorViewModel : ViewModel() {
     fun onRecall() {
         model.displayValue = model.recallValue().toString()
         updateDisplay(model.displayValue)
+        model.isNewOperand = false
     }
 }
